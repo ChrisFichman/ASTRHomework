@@ -1,0 +1,15 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+x=[1.,2.,3.,4.]
+y=[1.,7.,3.2,9.7]
+dy=[0.1,0.2,0.15,0.3]
+
+fig = plt.figure()
+plt.plot(x,y, 'wD')
+plt.errorbar(x,y,yerr=dy)
+
+plt.title('HW 2 Plot of X vs. Y with Errorbars')
+plt.xlabel('X')
+plt.ylabel('Y (with error dy)')
+plt.show()
