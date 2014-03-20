@@ -1,34 +1,37 @@
+#Name: Chris Fichman
+#Email: chris.fichman@gmail.com
+#Assignment: Homework 7
+
 from numpy import *
 from matplotlib import *
 from pylab import *
 from math import *
 
-x_data = []
-y_data = []
-
-#open file and read out data.
-with open('rays.txt') as data:
-	for line in data:
-		x,y = line.rstrip().split(' ')
-		x_data.append(float(x))
-		y_data.append(float(y))
+#open file and read out data into two arrays.
+x_data, y_data = loadtxt('correl.txt', delimiter = ',', unpack=True )
 
 #Find x_avg
-x_avg = float(fsum(x_data)/float(len(x_data)))
-y_avg = float(fsum(y_data)/float(len(y_data)))
+x_avg = fsum(x_data)/len(x_data)
+y_avg = fsum(y_data)/len(y_data)
 
-#Find the difference of x values and x_avg
-x_diff = [x_val - x_avg for x_val in x_data]
-y_diff = [y_val - y_avg for y_val in y_data]
+#Find the difference between data and average
+x_diff = x_data-x_avg
+y_diff = y_data-y_avg
+
+denom = len(x_data)*fsum(x_data*x_data)-fsum(x_data)**2
+A = (fsum(x_data*x_data)*fsum(y_data) - fsum(x_data)*fsum(x_data*y_data))/denom
+B = (len(y_data)*fsum(x_data*y_data)-fsum(x_data)*fsum(y_data))/denom
+r = fsum(x_diff*y_diff)/sqrt(fsum(x_diff**2)*fsum(y_diff**2))
+
+best_fit = B*x_data + A
 
 #Graph a Scatter Plot and Label
 scatter(x_data, y_data)
-plot(A,x, "b")
-plot(B,x, "r")
-plot(r,x, "g")
+p1, = plot(x_data,best_fit, "r")
 title("Chris Fichman - Correllation of x vs. y")
 xlabel("x")
 ylabel("y")
-label(str(conf))
+legend([p1],['Correlation Coefficient:' + str(r)])
+print('Confidence in correlation is 100% because the coefficient is > 0.35, and there are 100 datapoints.')
 show()
 
