@@ -1,37 +1,49 @@
-#Name: Chris Fichman
-#Email: chris.fichman@gmail.com
-#Assignment: Homework 7
-
 from numpy import *
 from matplotlib import *
 from pylab import *
 from math import *
 
-#open file and read out data into two arrays.
-x_data, y_data = loadtxt('correl.txt', delimiter = ',', unpack=True )
+x_data = []
+y_data = []
+z_data = []
+qx_data = []
+qy_data = []
+qz_data = []
+
+#open file and read out data.
+with open('rays.txt') as data:
+	for line in data:
+		x,y,z,qx,qy,qz = line.rstrip().split(' ')
+		x_data.append(float(x))
+		y_data.append(float(y))
+		z_data.append(float(z))
+		qx_data.append(float(qx))
+		qy_data.append(float(qy))
+		qz_data.append(float(qz))
 
 #Find x_avg
-x_avg = fsum(x_data)/len(x_data)
-y_avg = fsum(y_data)/len(y_data)
+x_avg = float(fsum(x_data)/float(len(x_data)))
+y_avg = float(fsum(y_data)/float(len(y_data)))
 
-#Find the difference between data and average
-x_diff = x_data-x_avg
-y_diff = y_data-y_avg
+#Find the difference of x values and x_avg
+x_diff = [x_val - x_avg for x_val in x_data]
+y_diff = [y_val - y_avg for y_val in y_data]
 
-denom = len(x_data)*fsum(x_data*x_data)-fsum(x_data)**2
-A = (fsum(x_data*x_data)*fsum(y_data) - fsum(x_data)*fsum(x_data*y_data))/denom
-B = (len(y_data)*fsum(x_data*y_data)-fsum(x_data)*fsum(y_data))/denom
-r = fsum(x_diff*y_diff)/sqrt(fsum(x_diff**2)*fsum(y_diff**2))
+#Truncate lists using slice
+x_av_trunc = x_diff[0:25]
+y_av_trunc = y_diff[0:25]
 
-best_fit = B*x_data + A
+#Write truncated lists to a text file
+file = open("rays_av.csv", "w")
+for (x_val, y_val) in zip(x_av_trunc, y_av_trunc):
+	string = (str(x_val) + "," + str(y_val) + "\n")
+	file.write(string)
+file.close()
 
 #Graph a Scatter Plot and Label
-scatter(x_data, y_data)
-p1, = plot(x_data,best_fit, "r")
-title("Chris Fichman - Correllation of x vs. y")
-xlabel("x")
-ylabel("y")
-legend([p1],['Correlation Coefficient:' + str(r)])
-print('Confidence in correlation is 100% because the coefficient is > 0.35, and there are 100 datapoints.')
+scatter(x_diff, y_diff)
+title("Chris Fichman - Graph of x_diff vs. y_diff")
+xlabel("x-x_avg")
+ylabel("y-y_avg")
 show()
 
