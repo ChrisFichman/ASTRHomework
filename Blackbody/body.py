@@ -5,12 +5,12 @@
 from numpy import *
 from matplotlib.pyplot import *
 
-wavelength = arange(0., 3000., 10.)
+wavelength = linspace(0.0, 1800.0, 1001)
 h = 6.6260693e-34
 c = 2.99792458e8
-k = 1.380658e-25
-const_1 = pi*2*h*c**2
-wavelength = wavelength*10**-6
+k = 1.380658e-23
+const_1 = 2*h*c**2
+wav = wavelength*10**-9
 
 class Body:
 	name = ""
@@ -25,10 +25,10 @@ class Body:
 
 def calc_and_graph(body):
 	T = body.temp
-	L = empty([120, 1])
-	const_2 = h*c/(T*k*wavelength)
-	L = const_1/((wavelength**5)*exp(const_2)-1)          #Blackbody
-	plot(wavelength, L, 'b')
+	intensity = empty([120, 1])
+	const_2 = h*c/(T*k*wav)
+	intensity = const_1/((wav**5)*(exp(const_2)-1))          #Blackbody
+	plot(wavelength, intensity, 'b')
 	show()
 
 def new_body(name, temp, radius, distance):
