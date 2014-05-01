@@ -17,11 +17,12 @@ class Body:
 	temp = float(0)
 	radius = float(0)
 	distance = float(0)
-	def __init__(self, name, temp, radius, distance):
+	def __init__(self, name, temp, radius, distance, color):
 		self.name = name
 		self.temp = temp
 		self.radius = radius
 		self.distance = distance
+		self.color = color
 
 def calc_and_graph(body):
 	T = body.temp
@@ -31,8 +32,8 @@ def calc_and_graph(body):
 	plot(wavelength, intensity, 'b')
 	show()
 
-def new_body(name, temp, radius, distance):
-	body = Body(name, temp, radius, distance)
+def new_body(name, temp, radius, distance, color):
+	body = Body(name, temp, radius, distance, color)
 	return body
 
 def print_all(body):
@@ -40,3 +41,4 @@ def print_all(body):
 	print "Temp: " + str(body.temp) + " K"
 	print "Radius: " + str(body.radius) + " m"
 	print "Distance: " + str(body.distance) + " pc"
+	print "Color: " + str(body.color)
