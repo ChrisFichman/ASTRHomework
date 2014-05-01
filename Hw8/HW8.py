@@ -6,14 +6,40 @@ from numpy import *
 from matplotlib import *
 from pylab import *
 from math import *
+from scipy.ndimage import *
+from astropy.io.fits import *
 
-image = zeros((1000,1000))
-print "Image Shape: "+ str(image.shape)
+image = fromfile('m33.dat', dtype = int16)
+image_fortran = image.reshape((1000,1000), order="FORTRAN")
+image_fortran_smoothed = filters.gaussian_filter(image_fortran, 5, mode='nearest')
+x_values = linspace(0.0, 12000.0, 500)
 
-with open('m33.dat', 'r') as data:  
-    image =[[0 for x in range(1000)] for x in range(1000)]
-    for i in range(1000):
-        for j in range(1000):
-            image[i][j] = data.readline()
+fitsfile = PrimaryHDU(data=image_fortran)
+fitsfile.writeto('m33.fits',clobber=True)
+data = getdata('m33.fits')
 
-print str(image)
+figure(1)
+imshow(data)
+
+figure(2)
+imshow(image_fortran, cmap='spectral')
+colorbar()
+
+figure(3)
+imshow(image_fortran, cmap='gist_heat')
+colorbar()
+contour(image_fortran_smoothed, levels=[3000, 6000, 9000, 12000],colors=('red','yellow','blue','white'))
+
+y_slice = image_fortran[:,500]
+x_slice = image_fortran[500,:]
+
+figure(4)
+plot(y_slice, 'b')
+plot(x_slice, 'r')
+
+print 'Max brightness = 13500'
+print 'Location = 817, 412'
+
+print 'Average Brigness at center = ~11000'
+
+show()

@@ -100,9 +100,13 @@ fig2.suptitle("Lorenz Attractor 1")
 
 fig3 = figure(3)
 
-plot(linspace(0.0, 1000.1, 10001), X1-X, 'r')
-plot(linspace(0.0, 1000.1, 10001), Y1-Y, 'b')
-plot(linspace(0.0, 1000.1, 10001), Z1-Z, 'y')
+x_diff, = plot(linspace(0.0, 5000.1, 5001), (X1-X)[:5001], 'r')
+y_diff, = plot(linspace(0.0, 5000.1, 5001), (Y1-Y)[:5001], 'b')
+z_diff, = plot(linspace(0.0, 5000.1, 5001), (Z1-Z)[:5001], 'y')
+legend([x_diff,y_diff,z_diff],["X_diff", "Y_diff", "Z_diff"])
+xlabel("Magnitude of difference")
+ylabel("Time(milliseconds)")
 fig3.suptitle("Difference in Magnitude in X, Y, and Z directions at each time step")
+xlim(0,5000)
 
 show()
